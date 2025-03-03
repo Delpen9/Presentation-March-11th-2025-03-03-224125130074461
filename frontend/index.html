@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <title>PDF Display</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    #pdf-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    canvas {
+      margin-bottom: 10px;
+      border: 1px solid #222;
+    }
+  </style>
+</head>
+<body>
+
+  <input type="file" id="pdf-upload" accept="application/pdf">
+  <div id="pdf-container"></div>
+
+  <script>
+    document.getElementById('pdf-upload').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function() {
+          const typedarray = new Uint8Array(this.result);
+          renderPDF(typedarray);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    });
+
+    function renderPDF(pdfData) {
+      const pdfContainer = document.getElementById('pdf-container');
+      pdfContainer.innerHTML = '';
+
+      pdfjsLib.getDocument(pdfData).promise.then(pdf => {
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          pdf.getPage(pageNum).then(page => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            const viewport = page.getViewport({ scale: 1.5 });
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport
+            };
+
+            page.render(renderContext).promise.then(() => {
+              pdfContainer.appendChild(canvas);
+            });
+          });
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
