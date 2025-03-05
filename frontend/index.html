@@ -20,17 +20,81 @@
             margin-bottom: 10px;
             border: 1px solid #222;
         }
-        h1 {
-            text-align: center;
-            font-size: 60px; /* Increased size */
+
+        .slide-wrapper {
+            position: relative;
+            margin-bottom: 20vh;
         }
-        h2 {
-            text-align: center;
-            font-size: 40px; /* Increased size */
+        .notes-btn {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease-in-out;
         }
-        h3 {
-            text-align: center;
-            font-size: 30px; /* Increased size */
+        .notes-btn:hover {
+            background-color: #e68900;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Softer overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px); /* Subtle blur for a modern effect */
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #f9f9f9; /* Light background for readability */
+            color: #222; /* Dark text for better contrast */
+            padding: 30px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            text-align: left;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(-10px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Close Button */
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .close-modal:hover {
+            color: #ff9800; /* Matches the theme */
+        }
+
+        /* Modal Text */
+        #modal-text {
+            font-size: 18px;
+            line-height: 1.6;
+            padding-top: 10px;
         }
 
         /* Download Button Styling */
@@ -79,44 +143,62 @@
       ">Download PDF</button>
     </div>
 
-    <br>
-    <br>
+    <br><br>
     <div id="pdf-container"></div>
+
+    <!-- Modal Structure (Now Starts Empty) -->
+    <div id="notes-modal" class="modal">
+      <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <h2>Slide Notes</h2>
+          <p id="modal-text"></p> <!-- Empty until a button is clicked -->
+      </div>
+    </div>
 
     <script>
         function renderPDF(url) {
             fetch(url)
                 .then(response => response.arrayBuffer())
                 .then(data => {
-                    pdfjsLib.getDocument(new Uint8Array(data)).promise.then(pdf => {
+                    pdfjsLib.getDocument(new Uint8Array(data)).promise.then(async (pdf) => {
                         const pdfContainer = document.getElementById('pdf-container');
                         pdfContainer.innerHTML = '';
 
-                        const scale = 0.9;  // Standard viewport scale
-                        const outputScale = 3; // Higher = sharper (3 or 4 for ultra-HD)
+                        const scale = 0.9;  
+                        const outputScale = 4;
 
                         for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                            pdf.getPage(pageNum).then(page => {
+                            await pdf.getPage(pageNum).then(page => {
                                 const viewport = page.getViewport({ scale: scale });
 
                                 const canvas = document.createElement('canvas');
                                 const context = canvas.getContext('2d');
 
-                                // Set canvas dimensions at higher resolution
                                 canvas.width = Math.floor(viewport.width * outputScale);
                                 canvas.height = Math.floor(viewport.height * outputScale);
-                                canvas.style.width = `${viewport.width}px`;   // Keeps normal display size
+                                canvas.style.width = `${viewport.width}px`;
                                 canvas.style.height = `${viewport.height}px`;
 
                                 const renderContext = {
                                     canvasContext: context,
                                     viewport: viewport,
-                                    transform: [outputScale, 0, 0, outputScale, 0, 0] // High DPI scaling
+                                    transform: [outputScale, 0, 0, outputScale, 0, 0]
                                 };
 
-                                page.render(renderContext).promise.then(() => {
-                                    canvas.style.marginBottom = "20vh"; // Add spacing between slides
-                                    pdfContainer.appendChild(canvas);
+                                return page.render(renderContext).promise.then(() => {
+                                    const slideWrapper = document.createElement('div');
+                                    slideWrapper.classList.add('slide-wrapper');
+
+                                    // Add the notes button
+                                    const notesButton = document.createElement('button');
+                                    notesButton.innerText = "View Notes";
+                                    notesButton.classList.add('notes-btn');
+                                    notesButton.setAttribute("data-slide", pageNum);
+                                    notesButton.onclick = () => openModal(pageNum);
+
+                                    slideWrapper.appendChild(canvas);
+                                    slideWrapper.appendChild(notesButton);
+                                    pdfContainer.appendChild(slideWrapper);
                                 });
                             });
                         }
@@ -138,6 +220,60 @@
             link.click();
             document.body.removeChild(link);
         }
+
+        let slideNotes = {}; // Object to store parsed notes
+
+        // Function to fetch and parse CSV file
+        function loadNotesFromCSV() {
+            fetch("notes.csv")
+                .then(response => response.text())
+                .then(csvText => {
+                    const rows = csvText.split("\n").slice(1); // Skip header row
+                    rows.forEach(row => {
+                        const [slide, notes] = row.split(",");
+                        if (slide && notes) {
+                            slideNotes[parseInt(slide.trim())] = notes.trim();
+                        }
+                    });
+                })
+                .catch(error => console.error("Error loading CSV:", error));
+        }
+
+        // Load notes on page load
+        document.addEventListener("DOMContentLoaded", loadNotesFromCSV);
+
+        // Function to open the modal with the correct notes
+        function openModal(slideNum) {
+            const modal = document.getElementById("notes-modal");
+            const modalText = document.getElementById("modal-text");
+
+            // Fetch notes dynamically
+            modalText.innerText = slideNotes[slideNum] || "No notes available for this slide.";
+
+            // Display modal with fade-in effect
+            modal.style.display = "flex";
+            modal.style.opacity = "0";
+            setTimeout(() => modal.style.opacity = "1", 50);
+        }
+
+        // Ensure modal doesn't open on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("notes-modal");
+            modal.style.display = "none";
+        });
+
+        // Function to close the modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById("notes-modal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // Close modal when clicking the "X"
+        document.querySelector(".close-modal").onclick = function() {
+            document.getElementById("notes-modal").style.display = "none";
+        };
     </script>
 
 </body>
