@@ -1,74 +1,144 @@
 <!doctype html>
 <html>
 <head>
-<title>PDF Display</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-<style>
-  body {
-    font-family: sans-serif;
-    padding: 20px;
-    background-color: #121212; /* Dark background */
-    color: white; /* Light text for contrast */
-  }
-  #pdf-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  canvas {
-    margin-bottom: 10px;
-    border: 1px solid #222;
-  }
-</style>
+    <title>PDF Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background-color: #121212; /* Dark background */
+            color: black; /* Light text for contrast */
+            position: relative;
+        }
+        #pdf-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            margin-bottom: 10px;
+            border: 1px solid #222;
+        }
+        h1 {
+            text-align: center;
+            font-size: 60px; /* Increased size */
+        }
+        h2 {
+            text-align: center;
+            font-size: 40px; /* Increased size */
+        }
+        h3 {
+            text-align: center;
+            font-size: 30px; /* Increased size */
+        }
+
+        /* Download Button Styling */
+        #download-btn {
+          background-color: #ff9800; /* Orange button */
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          font-size: 18px;
+          cursor: pointer;
+          border-radius: 5px;
+          display: block;
+          margin: 20px auto; /* Centers the button horizontally */
+          text-align: center;
+        }
+        #download-btn:hover {
+            background-color: #e68900; /* Darker orange on hover */
+        }
+    </style>
 </head>
 <body>
-<div id="pdf-container"></div>
+    <div style="
+      background-color: #2C2F33; /* Dark gray for a modern look */
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+      text-align: center;
+      max-width: 700px; /* Prevents it from being too wide */
+      margin: 40px auto; /* Centers the div */
+    ">
+      <h1 style="color: #FF9800; font-size: 50px; margin-bottom: 10px;">Memphis Data Professionals Presentation</h1>
+      <h2 style="color: white; font-size: 35px; margin-bottom: 5px;">March 11th, 2025</h2>
+      <h3 style="color: #B0BEC5; font-size: 28px; margin-bottom: 30px;">Ian Thomas Dover</h3>
 
-<script>
-  function renderPDF(url) {
-    fetch(url)
-      .then(response => response.arrayBuffer())
-      .then(data => {
-        pdfjsLib.getDocument(new Uint8Array(data)).promise.then(pdf => {
-          const pdfContainer = document.getElementById('pdf-container');
-          pdfContainer.innerHTML = '';
+      <!-- Download PDF Button -->
+      <button id="download-btn" onclick="downloadPDF()" style="
+          background-color: #FF9800;
+          color: white;
+          border: none;
+          padding: 12px 25px;
+          font-size: 20px;
+          cursor: pointer;
+          border-radius: 8px;
+          font-weight: bold;
+          transition: background 0.3s ease-in-out;
+      ">Download PDF</button>
+    </div>
 
-          const scale = 1;  // Standard viewport scale
-          const outputScale = 3; // Higher = sharper (3 or 4 for ultra-HD)
+    <br>
+    <br>
+    <div id="pdf-container"></div>
 
-          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            pdf.getPage(pageNum).then(page => {
-              const viewport = page.getViewport({ scale: scale });
+    <script>
+        function renderPDF(url) {
+            fetch(url)
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    pdfjsLib.getDocument(new Uint8Array(data)).promise.then(pdf => {
+                        const pdfContainer = document.getElementById('pdf-container');
+                        pdfContainer.innerHTML = '';
 
-              const canvas = document.createElement('canvas');
-              const context = canvas.getContext('2d');
+                        const scale = 0.9;  // Standard viewport scale
+                        const outputScale = 3; // Higher = sharper (3 or 4 for ultra-HD)
 
-              // Set canvas dimensions at higher resolution
-              canvas.width = Math.floor(viewport.width * outputScale);
-              canvas.height = Math.floor(viewport.height * outputScale);
-              canvas.style.width = `${viewport.width}px`;   // Keeps normal display size
-              canvas.style.height = `${viewport.height}px`;
+                        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                            pdf.getPage(pageNum).then(page => {
+                                const viewport = page.getViewport({ scale: scale });
 
-              const renderContext = {
-                canvasContext: context,
-                viewport: viewport,
-                transform: [outputScale, 0, 0, outputScale, 0, 0] // High DPI scaling
-              };
+                                const canvas = document.createElement('canvas');
+                                const context = canvas.getContext('2d');
 
-              page.render(renderContext).promise.then(() => {
-                canvas.style.marginBottom = "20vh"; // Add spacing between slides
-                pdfContainer.appendChild(canvas);
-              });
-            });
-          }
-        });
-      })
-      .catch(error => console.error('Error loading PDF:', error));
-  }
+                                // Set canvas dimensions at higher resolution
+                                canvas.width = Math.floor(viewport.width * outputScale);
+                                canvas.height = Math.floor(viewport.height * outputScale);
+                                canvas.style.width = `${viewport.width}px`;   // Keeps normal display size
+                                canvas.style.height = `${viewport.height}px`;
 
-  // Load the PDF
-  renderPDF('/presentation_march_11th.pdf');
-</script>
+                                const renderContext = {
+                                    canvasContext: context,
+                                    viewport: viewport,
+                                    transform: [outputScale, 0, 0, outputScale, 0, 0] // High DPI scaling
+                                };
+
+                                page.render(renderContext).promise.then(() => {
+                                    canvas.style.marginBottom = "20vh"; // Add spacing between slides
+                                    pdfContainer.appendChild(canvas);
+                                });
+                            });
+                        }
+                    });
+                })
+                .catch(error => console.error('Error loading PDF:', error));
+        }
+
+        // Load the PDF
+        const pdfUrl = '/presentation_march_11th.pdf';
+        renderPDF(pdfUrl);
+
+        // Function to download the PDF
+        function downloadPDF() {
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = 'presentation_march_11th.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 
 </body>
 </html>
