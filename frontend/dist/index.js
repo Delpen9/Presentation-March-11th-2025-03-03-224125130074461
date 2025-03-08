@@ -72,7 +72,12 @@ async function renderPDF(url) {
                                 additionalResourcesBtn.style.backgroundColor = "purple";
                                 additionalResourcesBtn.style.color = "white";
                                 additionalResourcesBtn.onclick = () => {
-                                    alert(`Resources: ${additionalResources[pageNum - 1] || "No additional resources available"}`);
+                                    const url = additionalResources[pageNum - 1] ? additionalResources[pageNum - 1][0].trim() : "";
+                                    if (url) {
+                                        window.open(url, "_blank");
+                                    } else {
+                                        alert("No code example available for this slide.");
+                                    }
                                 };
 
                                 // Code Example button
