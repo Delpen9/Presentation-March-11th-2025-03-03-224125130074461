@@ -1,0 +1,150 @@
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    background-color: #121212; /* Dark background */
+    color: black; /* Light text for contrast */
+    position: relative;
+}
+
+#pdf-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Placeholder styling */
+#pdf-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 40px; /* Increase font size */
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.2);
+    border-top: 5px solid #ff9800; /* Orange color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+canvas {
+    margin-bottom: 10px;
+    border: 1px solid #222;
+}
+
+.image-container {
+    width: 100%;
+    background-color: white; /* Ensure the background is white */
+    display: flex;
+    justify-content: center; /* Center the image */
+}
+
+.image-container img {
+    width: 100%;
+    max-width: 100%; /* Adjust this value to prevent it from being too wide */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below image */
+}
+
+.slide-wrapper {
+    position: relative;
+    margin-bottom: 20vh;
+}
+.notes-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 15px 25px; /* Increase padding for a larger button */
+  font-size: 20px; /* Increase font size */
+  cursor: pointer;
+  border-radius: 8px; /* Slightly bigger border radius for a softer look */
+  transition: background 0.3s ease-in-out;
+}
+.notes-btn:hover {
+    background-color: #e68900;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Softer overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px); /* Subtle blur for a modern effect */
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #f9f9f9; /* Light background for readability */
+    color: #222; /* Dark text for better contrast */
+    padding: 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 600px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateY(-10px);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Close Button */
+.close-modal {
+    position: absolute;
+    top: 0px;
+    right: 16px;
+    font-size: 100px;
+    cursor: pointer;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.close-modal:hover {
+    color: #ff9800; /* Matches the theme */
+}
+
+/* Modal Text */
+#modal-text {
+    font-size: 18px;
+    line-height: 1.6;
+    padding-top: 10px;
+}
+
+/* Download Button Styling */
+#download-btn {
+  background-color: #ff9800; /* Orange button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: block;
+  margin: 20px auto; /* Centers the button horizontally */
+  text-align: center;
+}
+#download-btn:hover {
+    background-color: #e68900; /* Darker orange on hover */
+}
