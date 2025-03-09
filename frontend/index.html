@@ -3,6 +3,7 @@
   <head>
     <title>Memphis Data Professionals Presentation March 11th</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="stylesheet" href="/index.css">
 </head>
 <body>
@@ -31,6 +32,15 @@
           font-weight: bold;
           transition: background 0.3s ease-in-out;
       ">Download PDF</button>
+    </div>
+
+    <div class="ask-form-container">
+        <h2 class="ask-form-title">Ask Me a Question</h2>
+        <form id="ask-questionForm" onsubmit="sendEmail(event)">
+            <textarea id="ask-question" class="ask-textarea" name="question" rows="4" placeholder="Type your question here..." required></textarea>
+            <input type="email" id="ask-userEmail" class="ask-input" name="userEmail" placeholder="Your Email (optional)">
+            <button type="submit" class="ask-submit-btn">Submit</button>
+        </form>
     </div>
 
     <br><br>

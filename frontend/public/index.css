@@ -184,3 +184,55 @@ hr {
 #download-btn:hover {
     background-color: #e68900; /* Darker orange on hover */
 }
+
+/* Ask Me a Question Form Styles */
+.ask-form-container {
+    background-color: white; /* Dark gray for a modern look */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    text-align: center;
+    max-width: 700px; /* Prevents it from being too wide */
+    margin: 40px auto; /* Centers the div */
+}
+
+.ask-form-title {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Input Fields */
+.ask-textarea, .ask-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.ask-textarea:focus, .ask-input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Submit Button */
+.ask-submit-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.ask-submit-btn:hover {
+    background-color: #0056b3;
+}

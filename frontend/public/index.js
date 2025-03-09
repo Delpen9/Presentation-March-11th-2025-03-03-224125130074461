@@ -120,7 +120,7 @@ async function renderPDF(url) {
 }
 
 // Function to open the PDF in a new tab
-function downloadPDF() {
+async function downloadPDF() {
     const link = document.createElement('a');
     link.href = pdfUrl;
     link.target = '_blank';  // Opens in a new tab
@@ -132,7 +132,7 @@ function downloadPDF() {
 }
 
 // Function to open the modal with the correct notes
-function openModal(slideNum) {
+async function openModal(slideNum) {
     const modal = document.getElementById("notes-modal");
     const modalText = document.getElementById("modal-text");
 
@@ -143,4 +143,34 @@ function openModal(slideNum) {
     modal.style.display = "flex";
     modal.style.opacity = "0";
     setTimeout(() => modal.style.opacity = "1", 50);
+}
+
+(async function() {
+    emailjs.init("yojKewMlN1DLry8Gf");
+})();
+
+async function sendEmail(event) {
+    event.preventDefault(); // Prevent page refresh
+    
+    let question = document.getElementById("ask-question").value.trim();
+    let userEmail = document.getElementById("ask-userEmail").value.trim();
+
+    if (!question) {
+        alert("Please enter your question.");
+        return;
+    }
+
+    let templateParams = {
+        question: question,
+        user_email: userEmail || "No email provided"
+    };
+
+    emailjs.send("service_3i742qe", "template_xzgso2b", templateParams)
+        .then(function(response) {
+            alert("Your question has been sent successfully!");
+            document.getElementById("ask-questionForm").reset();
+        }, function(error) {
+            alert("Failed to send. Please try again.");
+            console.error("EmailJS Error:", error);
+        });
 }
