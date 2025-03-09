@@ -136,7 +136,8 @@ hr {
     color: #222; /* Dark text for better contrast */
     padding: 30px;
     border-radius: 12px;
-    width: 80%;
+    height: 50%;
+    width: 100%;
     max-width: 600px;
     text-align: left;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -204,14 +205,16 @@ hr {
 }
 
 /* Input Fields */
-.ask-textarea, .ask-input {
+.ask-textarea, .ask-input, .ask-submit-btn {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
     transition: 0.3s;
+    box-sizing: border-box; /* Ensures width includes padding & border */
+    display: block; /* Ensures consistent block layout */
 }
 
 .ask-textarea:focus, .ask-input:focus {
@@ -221,16 +224,9 @@ hr {
 
 /* Submit Button */
 .ask-submit-btn {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 5px;
     background-color: #007BFF;
     color: white;
-    font-size: 16px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 .ask-submit-btn:hover {

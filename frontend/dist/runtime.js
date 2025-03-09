@@ -4,24 +4,24 @@ renderPDF(pdfUrl);
 
 let slideNotes = {}; // Object to store parsed notes
 
-// Function to fetch and parse CSV file
-function loadNotesFromCSV() {
-    fetch("notes.csv")
+// Function to fetch and parse PSV file
+function loadNotesFromPSV() {
+    fetch("notes.psv")
         .then(response => response.text())
-        .then(csvText => {
-            const rows = csvText.split("\n").slice(1); // Skip header row
+        .then(psvText => {
+            const rows = psvText.split("\n").slice(1); // Skip header row
             rows.forEach(row => {
-                const [slide, notes] = row.split(",");
+                const [slide, notes] = row.split("|");
                 if (slide && notes) {
                     slideNotes[parseInt(slide.trim())] = notes.trim();
                 }
             });
         })
-        .catch(error => console.error("Error loading CSV:", error));
+        .catch(error => console.error("Error loading PSV:", error));
 }
 
 // Load notes on page load
-document.addEventListener("DOMContentLoaded", loadNotesFromCSV);
+document.addEventListener("DOMContentLoaded", loadNotesFromPSV);
 
 // Ensure modal doesn't open on page load
 document.addEventListener("DOMContentLoaded", function () {
