@@ -1,27 +1,27 @@
 slide|notes
 1|Ian holds a bachelor’s degree in Electrical Engineering from Christian Brothers University and a master’s in Computer Science with a concentration in Machine Learning from Georgia Tech. With two published papers in deep learning, they have a strong research background in AI. Beyond their technical expertise, they are passionate about mentorship and volunteer as a mentor at Youth Villages. They are also an active member of Second Presbyterian Church.
 2|Snowflake retrieves raw production premiums and claims data and sends it to Databricks. Databricks triggers a job that processes data, filters records, generates transformations, calculates premium trends, removes redundant segments, and identifies impactful segments. Snowflake stores processed data in an append-only format. GitHub handles regression testing, pull request conditions, and validation checks. Streamlit updates the end-user dashboard with the latest processed data.
-3|Key case studies from the past year in data science.
-4|Q&A session and closing remarks.
-5|Q&A session and closing remarks.
-6|Q&A session and closing remarks.
-7|Q&A session and closing remarks.
-8|Q&A session and closing remarks.
-9|Q&A session and closing remarks.
-10|Q&A session and closing remarks.
-11|Q&A session and closing remarks.
-12|Q&A session and closing remarks.
-13|Q&A session and closing remarks.
-14|Q&A session and closing remarks.
-15|Q&A session and closing remarks.
-16|Q&A session and closing remarks.
-17|Q&A session and closing remarks.
-18|Q&A session and closing remarks.
-19|Q&A session and closing remarks.
-20|Q&A session and closing remarks.
-21|Q&A session and closing remarks.
-22|Q&A session and closing remarks.
-23|Q&A session and closing remarks.
-24|Q&A session and closing remarks.
-25|Q&A session and closing remarks.
+3|The slide presents a Medallion Architecture flowchart, detailing the orchestration of data from Snowflake raw data through Bronze, Silver, and Gold layers using Databricks workflows triggered by GitHub Actions, with data transformations occurring via notebooks and stored in Parquet before final business logic is applied to Snowflake append-only tables.
+4|The slide explains idempotency, emphasizing that a function’s output must remain the same for identical inputs across multiple executions, which is crucial for application testing and data engineering pipelines, contrasting a non-idempotent function that modifies output with randomness against an idempotent function that consistently returns the same value.
+5|The slide illustrates Integration Snapshot Testing in analytics engineering, where a parent function processes data using dependency injection (Parquet) and sequential child functions, comparing the actual output to a previously saved expected output using a comparison function to determine if the test passes or fails.
+6|The slide explains Integration Unit Testing, where a parent function processes data through dependency injection (Parquet) and child functions, comparing the actual output to an expected output derived from a trusted external method (e.g., manual, LLM, alternative software) using a comparison function to determine if the test passes or fails.
+7|The slide presents Alternative Testing methods in software development, emphasizing that “Good software is well-tested software,” and outlining four key testing types: Smoke Testing (checks if it runs), Performance Testing (measures speed), UI Testing (verifies UI behavior), and Property Testing (ensures output fits expected bounds).
+8|The slide compares Snapshot Testing and Unit Testing, highlighting that snapshot tests rely on previous outputs, require frequent updates, and should be peer-reviewed, while unit tests conceptually validate functionality, are used for critical software components, and provide developers with confidence, illustrated by one developer losing sleep over unreliable snapshots and another resting easy with validated unit tests.
+9|Test-Driven Development (TDD) is a software development approach where tests are written before the actual code, ensuring functionality meets requirements through iterative test, code, and refactor cycles.
+10|The slide compares Asynchronous vs. Synchronous Processing, illustrating how asynchronous operations execute reads and writes concurrently on separate threads to reduce data pipeline runtime, while synchronous operations execute sequentially, leading to longer processing times.
+11|The slide compares Chunking vs. Parallelization, where chunking processes tasks sequentially with O(n) time and O(1) space complexity, while parallelization distributes tasks across multiple processors, achieving O(1) time but requiring O(n) space complexity for increased efficiency.
+12|The slide compares Programming Language Trade-Offs across Pandas, Polars, PySpark, and SQL, evaluating their suitability for small and large datasets, big data processing, parallelism, ETL, ML/statistical modeling, and cloud-based processing, highlighting strengths like Pandas for small data, Polars for efficiency, PySpark for distributed big data, and SQL for query optimizations and cloud-native processing.
+13|The slide compares Pandas vs. Polars Performance Scaling, showing execution time as dataset size increases, where Polars consistently outperforms Pandas, demonstrating lower execution time and better scalability for large datasets.
+14|The slide compares Batch vs. Stream Processing, where batch processing runs data in scheduled intervals using ETL pipelines with flexible tech choices, while stream processing processes data continuously in real-time through queues, requiring a narrower set of specialized tools.
+15|The slide compares Loop-based vs. NumPy vs. PyArrow Vectorization in Python, showing that NumPy achieves the fastest execution time, followed by PyArrow, while loop-based operations are significantly slower, highlighting the efficiency gains of vectorized computations. Vectorization is a technique in computing where operations are applied to entire arrays or batches of data simultaneously instead of using explicit loops, leveraging optimized low-level implementations to achieve faster execution times and improved performance in numerical and data-processing tasks.
+16|The slide illustrates the CI/CD (Continuous Integration/Continuous Deployment) pipeline, showing how code progresses from a feature branch through unit tests and peer reviews into the development branch, where more advanced testing occurs before merging into the production branch, followed by pre-production deployment and final production deployment.
+17|The slide demonstrates SQL Injection Attacks, contrasting an unsafe query that directly concatenates user input (vulnerable to attacks) with a safe query that uses parameterized queries to prevent malicious injections.
+18|Internet Computer Protocol (ICP) is a decentralized blockchain network developed by DFINITY, designed to run smart contracts and full-stack web applications at internet scale, enabling secure, autonomous, and tamper-proof computing without relying on traditional cloud infrastructure, using canister smart contracts for scalability and efficiency.
+19|Internet Computer Protocol (ICP) is a decentralized blockchain network developed by DFINITY, designed to run smart contracts and full-stack web applications at internet scale, enabling secure, autonomous, and tamper-proof computing without relying on traditional cloud infrastructure, using canister smart contracts for scalability and efficiency.
+20|Distributed Data Parallel (DDP) model training is a technique where a deep learning model is replicated across multiple GPUs or nodes, each processing a subset of the data in parallel while synchronizing gradients through all-reduce operations to ensure consistency and efficient scalability.
+21|Model Parallel Training is a technique where a deep learning model is split across multiple GPUs or nodes, with different parts of the model processed in parallel to handle large architectures that don’t fit into a single device’s memory, improving scalability for massive models.
+22|Tensor Parallel Training is a model parallelism technique that splits individual tensors (weights and activations) across multiple GPUs, enabling efficient distributed computation of large deep learning models while minimizing memory overhead and communication costs.
+23|Zero Redundancy Optimization (ZeRO) is a memory-efficient parallelism technique that eliminates redundant model state replication across GPUs by partitioning parameters, gradients, and optimizer states, enabling the training of massive deep learning models that exceed single-device memory limitations while maintaining efficient communication and computation.
+24|Graviton: Trusted Execution Environments on GPUs is a secure GPU architecture proposed by Microsoft that enables applications to offload security- and performance-sensitive workloads to GPUs while ensuring isolation from the host system, including the GPU driver, OS, and hypervisor, without modifying existing CPU, GPU cores, or memory controllers, providing low-overhead (17-33%) secure execution using encrypted memory and runtime extensions.
+25|The slide illustrates the Retrieval-Augmented Generation (RAG) pipeline, where raw documents are preprocessed into vector embeddings and stored in a vector database, while user queries are encoded, embedded, and matched against the database to retrieve the most relevant top-k documents. These retrieved documents are then aggregated and used to construct a context-enhanced prompt for a language model, which generates a more accurate, factually grounded response by leveraging both pre-trained knowledge and retrieved external information, ensuring improved reliability and relevance in AI-generated outputs.
 26|Q&A session and closing remarks.
