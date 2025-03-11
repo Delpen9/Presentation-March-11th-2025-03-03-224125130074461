@@ -120,12 +120,12 @@ async function renderPDF(url) {
 }
 
 // Function to open the PDF in a new tab
-async function downloadPDF() {
+async function downloadPDF(pdfUrl, downloadLink) {
     const link = document.createElement('a');
     link.href = pdfUrl;
     link.target = '_blank';  // Opens in a new tab
     link.rel = 'noopener noreferrer';  // Security best practices
-    link.download = 'presentation_march_11th.pdf';
+    link.download = downloadLink;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
