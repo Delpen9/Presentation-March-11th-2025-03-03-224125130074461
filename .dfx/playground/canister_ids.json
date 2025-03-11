@@ -1,8 +1,4 @@
 {
-  "backend": {
-    "playground": "4y4bj-oaaaa-aaaab-qac4q-cai"
-  },
-  "frontend": {
-    "playground": "wqbl4-ayaaa-aaaab-qadga-cai"
-  }
+  "backend": {},
+  "frontend": {}
 }
